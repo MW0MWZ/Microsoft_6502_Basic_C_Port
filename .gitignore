@@ -1,0 +1,15 @@
+# Build artifacts
+*.o
+*.a
+*.tar
+m6502basic
+
+# Editor files
+*~
+*.swp
+*.swo
+.DS_Store
+
+# IDE files
+.vscode/
+.idea/

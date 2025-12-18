@@ -1,0 +1,64 @@
+#
+# Makefile.bsd for Microsoft 6502 BASIC C Port
+# BSD Make for 2.11 BSD on PDP-11
+#
+
+CC= cc
+CFLAGS= -O -D__211BSD__
+
+all: m6502basic
+
+# Use archive to avoid long command lines
+libbasic.a: main.o error.o strings.o variables.o arrays.o
+	ar rv libbasic.a main.o error.o strings.o variables.o arrays.o
+	ranlib libbasic.a
+
+libbasic2.a: tokenize.o eval.o parse.o execute.o repl.o
+	ar rv libbasic2.a tokenize.o eval.o parse.o execute.o repl.o
+	ranlib libbasic2.a
+
+libbasic3.a: functions.o statements.o
+	ar rv libbasic3.a functions.o statements.o
+	ranlib libbasic3.a
+
+m6502basic: libbasic.a libbasic2.a libbasic3.a
+	$(CC) $(CFLAGS) -o m6502basic libbasic.a libbasic2.a libbasic3.a -lm
+
+main.o: main.c m6502basic.h
+	$(CC) $(CFLAGS) -c main.c
+
+error.o: error.c m6502basic.h
+	$(CC) $(CFLAGS) -c error.c
+
+strings.o: strings.c m6502basic.h
+	$(CC) $(CFLAGS) -c strings.c
+
+variables.o: variables.c m6502basic.h
+	$(CC) $(CFLAGS) -c variables.c
+
+arrays.o: arrays.c m6502basic.h
+	$(CC) $(CFLAGS) -c arrays.c
+
+tokenize.o: tokenize.c m6502basic.h
+	$(CC) $(CFLAGS) -c tokenize.c
+
+eval.o: eval.c m6502basic.h
+	$(CC) $(CFLAGS) -c eval.c
+
+parse.o: parse.c m6502basic.h
+	$(CC) $(CFLAGS) -c parse.c
+
+execute.o: execute.c m6502basic.h
+	$(CC) $(CFLAGS) -c execute.c
+
+repl.o: repl.c m6502basic.h
+	$(CC) $(CFLAGS) -c repl.c
+
+functions.o: functions.c m6502basic.h
+	$(CC) $(CFLAGS) -c functions.c
+
+statements.o: statements.c m6502basic.h
+	$(CC) $(CFLAGS) -c statements.c
+
+clean:
+	rm -f *.o *.a m6502basic
